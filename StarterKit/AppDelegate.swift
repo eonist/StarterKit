@@ -11,13 +11,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 extension AppDelegate {
    func createWindow() -> UIWindow {
       let win = UIWindow(frame: UIScreen.main.bounds)
-      let vc = MasterNC()
-      win.rootViewController = vc
+      let nc = createNC()
+      win.rootViewController = nc
       win.makeKeyAndVisible() // Important since we have no Main storyboard anymore
       return win
    }
-}
-extension AppDelegate {
+   /**
+    * - Note: you can also do: self.viewControllers = [vc]
+    */
+   func createNC() -> MasterNC{
+      let nc = MasterNC()
+      let masterVC = MasterVC()
+      nc.pushViewController(masterVC, animated: false)
+      return nc
+   }
    /**
     * LoginVC
     * - Note: ref: https://stackoverflow.com/questions/28929424/present-viewcontroller-on-top-of-other-programmatically
@@ -25,8 +32,9 @@ extension AppDelegate {
     */
    func createLoginVC() {
       let vc = OverlayVC()
-            vc.modalPresentationStyle = .overCurrentContext
+      vc.modalPresentationStyle = .overCurrentContext
       let parentVC = window?.rootViewController?.presentedViewController ?? window?.rootViewController
       parentVC?.present(vc, animated: false, completion: nil)
    }
 }
+
